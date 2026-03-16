@@ -60,25 +60,6 @@ export default function FinalizeRental() {
     try {
       const rentalId = crypto.randomUUID();
 
-      await apiCall('send-email', {
-        to: "deweyfellowship@gmail.com",
-        from_name: "Powers Home Rentals",
-        subject: `New Rental Payment - ${formData.customer_name}`,
-        body: `
-Customer is proceeding to payment!
-
-Customer: ${formData.customer_name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Address: ${formData.address}, ${formData.city}, AZ ${formData.zip_code}
-Plan: ${currentPlan.name} - $${currentPlan.price}/month
-Rental ID: ${rentalId}
-Status: Pending Payment
-
-Customer is being redirected to Stripe checkout.
-`
-      });
-
       // Save rental data to localStorage for the Success page
       localStorage.setItem('pending_rental', JSON.stringify({
         id: rentalId,

@@ -2,83 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { CheckCircle, Phone, Mail, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { apiCall } from "@/api/base44Client";
 
 export default function SuccessPage() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const rentalId = urlParams.get("rental_id");
-  const sessionId = urlParams.get("session_id");
-  const [isLoading, setIsLoading] = useState(true);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-  const [emailSent, setEmailSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const verifyPaymentAndSendEmail = async () => {
-      if (!sessionId || !rentalId) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        const response = await apiCall('get-session', {
-          session_id: sessionId
-        });
-
-        if (response.payment_status === 'paid' || response.status === 'complete') {
-          setPaymentStatus('success');
-
-          const rentalData = JSON.parse(localStorage.getItem('pending_rental') || 'null');
-
-          if (rentalData && !emailSent) {
-            await apiCall('send-email', {
-              to: rentalData.email,
-              from_name: "Powers Home Rentals",
-              subject: "Thank You for Renting with Powers Home Rentals!",
-              body: `Hi ${rentalData.customer_name},
-
-Thank you for choosing Powers Home Rentals! We're thrilled to have you as a customer.
-
-Payment Successful!
-
-Your monthly subscription for ${rentalData.appliance_type === 'washer_dryer_set' ? 'Washer & Dryer Set' : 'Single Machine'} at $${rentalData.monthly_rate}/month has been activated.
-
-What's Next?
-Our team will contact you within 24 hours to schedule delivery and installation at:
-${rentalData.address}, ${rentalData.city}, AZ ${rentalData.zip_code}
-
-Confirmation Details:
-- Rental ID: ${rentalId}
-- Plan: ${rentalData.appliance_type === 'washer_dryer_set' ? 'Washer & Dryer Set' : 'Single Machine'}
-- Monthly Rate: $${rentalData.monthly_rate}
-
-Need Help?
-Phone: 928-830-3278
-Email: Powershomerentals@gmail.com
-
-We look forward to serving you!
-
-Best regards,
-Powers Home Rentals Team
-`
-            });
-            setEmailSent(true);
-          }
-        } else {
-          setPaymentStatus('processing');
-        }
-      } catch (error) {
-        console.error('Error verifying payment:', error);
-        setPaymentStatus('success');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    verifyPaymentAndSendEmail();
-  }, [sessionId, rentalId, emailSent]);
+    localStorage.removeItem('pending_rental');
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-lime-500 via-lime-600 to-teal-600 flex items-center justify-center p-4 relative overflow-hidden">

@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from "react";
-import { apiCall } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -65,30 +64,6 @@ export default function Checkout() {
     setError("");
 
     try {
-      const rentalId = crypto.randomUUID();
-
-      await apiCall('send-email', {
-        to: "deweyfellowship@gmail.com",
-        from_name: "Powers Home Rentals",
-        subject: `New Rental Inquiry - ${formData.customer_name}`,
-        body: `
-New rental inquiry received!
-
-Customer: ${formData.customer_name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Address: ${formData.address}, ${formData.city}, AZ ${formData.zip_code}
-Preferred Delivery: ${format(deliveryDate, 'MMMM d, yyyy')}
-Plan: ${currentPlan.name} - $${currentPlan.price}/month
-Notes: ${formData.notes || 'None'}
-
-Rental ID: ${rentalId}
-Status: Inquiry (No waiver signed, no payment)
-
-Next Steps: Contact customer to discuss rental and next steps.
-`
-      });
-
       setSuccess(true);
       // Removed window.scrollTo here as it's now handled by the new useEffect
 
