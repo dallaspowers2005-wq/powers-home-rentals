@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ChatBot from "@/components/ChatBot";
 
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -122,8 +121,6 @@ export default function Layout({ children }) {
       {/* Main Content */}
       <main>{children}</main>
 
-      {/* ChatBot */}
-      <ChatBot />
 
       {/* Footer */}
       <footer className="bg-teal-950 text-white mt-20 border-t border-teal-800">
